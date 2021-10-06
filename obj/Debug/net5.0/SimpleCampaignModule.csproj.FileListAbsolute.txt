@@ -1,0 +1,16 @@
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\bin\Debug\net5.0\SimpleCampaignModule.exe
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\bin\Debug\net5.0\SimpleCampaignModule.deps.json
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\bin\Debug\net5.0\SimpleCampaignModule.runtimeconfig.json
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\bin\Debug\net5.0\SimpleCampaignModule.runtimeconfig.dev.json
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\bin\Debug\net5.0\SimpleCampaignModule.dll
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\bin\Debug\net5.0\ref\SimpleCampaignModule.dll
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\bin\Debug\net5.0\SimpleCampaignModule.pdb
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleCampaignModule.csproj.AssemblyReference.cache
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleCampaignModule.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleCampaignModule.AssemblyInfoInputs.cache
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleCampaignModule.AssemblyInfo.cs
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleCampaignModule.csproj.CoreCompileInputs.cache
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleCampaignModule.dll
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\ref\SimpleCampaignModule.dll
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleCampaignModule.pdb
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleCampaignModule.genruntimeconfig.cache
