@@ -1,22 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using SimpleCampaignModule.Domain.Product;
 using SimpleCampaignModule.Domain.Order;
 using SimpleCampaignModule.Domain.Campaign;
+using Microsoft.Extensions.DependencyInjection;
 using SimpleCampaignModule.Business;
+using SimpleCampaignModule.Common;
 
 namespace SimpleCampaignModule.Controller
 {
-    public class Controllers
+    public class Controllers: IControllers
     {
         
-        BusinessActions businessActions;
+        IBusinessActions businessActions;
         
         public Controllers()
         {
-            businessActions = new BusinessActions();
+            businessActions = Services.serviceProvider.GetService<IBusinessActions>();
         }        
 
         public string CreateProduct(Product product)
@@ -74,7 +72,6 @@ namespace SimpleCampaignModule.Controller
 
         public string IncreaseTime(int hour)
         {
-            // TODO + create EntryPoint which will read files , create objects and direct them Controller
             return businessActions.IncreaseTime(hour);
         }
     }

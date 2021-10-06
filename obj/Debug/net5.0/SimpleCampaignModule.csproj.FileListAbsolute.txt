@@ -14,3 +14,6 @@ C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleC
 C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\ref\SimpleCampaignModule.dll
 C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleCampaignModule.pdb
 C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleCampaignModule.genruntimeconfig.cache
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\bin\Debug\net5.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\bin\Debug\net5.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\media\Desktop\ConsoleApps\SimpleCampaignModule\obj\Debug\net5.0\SimpleCampaignModule.csproj.CopyComplete

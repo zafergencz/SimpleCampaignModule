@@ -8,12 +8,12 @@ using SimpleCampaignModule.Persistence;
 
 namespace SimpleCampaignModule.Business
 {
-    public class BusinessActions
+    public class BusinessActions: IBusinessActions
     {
         private int globalHour = 0;
-        public decimal PriceManipulation(string productCode, int newstock, int orderQuantity, decimal currentPrice)
+        private decimal PriceManipulation(string productCode, int newstock, int orderQuantity, decimal currentPrice)
         {
-            Campaign campaign = GetCampaign(productCode);
+            Campaign campaign = GetActiveCampaignOfProduct(productCode);
             decimal newPrice = currentPrice;
 
             if(campaign != null)
@@ -44,14 +44,15 @@ namespace SimpleCampaignModule.Business
                 if(order.Quantity <= product.Stock)
                 {
                     int newstock = product.Stock - order.Quantity;
-                    decimal newPrice = product.Price;                 
+                    decimal newPrice = product.Price;  
+                    decimal previousPrice = product.Price;               
 
-                    if(ProductHasCampaign(order.ProductCode))
+                    if(ProductHasActiveCampaign(order.ProductCode))
                     {
                         newPrice = PriceManipulation(order.ProductCode, newstock, order.Quantity, product.Price);
                     }                
 
-                    string result = UpdateProduct(order.ProductCode, newPrice, newstock);    
+                    string result = UpdateProduct(order.ProductCode, newPrice, previousPrice, newstock);    
 
                     if(result == null)
                     {
@@ -75,12 +76,24 @@ namespace SimpleCampaignModule.Business
             return res;
         }
 
-        public bool ProductHasCampaign(string productCode)
+        private bool ProductHasActiveCampaign(string productCode)
         {
-            return Database.ActiveCampaignCache.ContainsKey(productCode);            
+            bool res = false;
+            Dictionary<string, Campaign> productCampaigns;
+            if(Database.CampaignCache.TryGetValue(productCode, out productCampaigns))
+            {
+                Campaign activeCampaign = productCampaigns.Values.SingleOrDefault(x => x.IsActive);
+
+                if(activeCampaign != null)
+                {
+                    res = true;
+                }
+            }
+
+            return res;
         }
 
-        public string SaveOrder(Order order)
+        private string SaveOrder(Order order)
         {
             if(Database.OrderCache.ContainsKey(order.ProductCode))
             {
@@ -100,36 +113,98 @@ namespace SimpleCampaignModule.Business
         {
             string res;
 
-            if(Database.ActiveCampaignCache.ContainsKey(campaign.ProductCode))
+            if(ProductHasActiveCampaign(campaign.ProductCode))
             {
                 res = "Active Campaign Already Exist For Product: " + campaign.ProductCode;
             }
             else
-            {
-                Product product = GetProduct(campaign.ProductCode);
-
-                if(product != null)
+            { 
+                Dictionary<string, Campaign> allCampaignsOfProduct;
+                // bu product koda ait kampanyalar var mı (bir ürünün pasif kampanyaları da olabilir)
+                if(Database.CampaignCache.TryGetValue(campaign.ProductCode, out allCampaignsOfProduct) && allCampaignsOfProduct != null)
                 {
-                    campaign.OriginalPrice = product.Price;
-                    campaign.OriginalStock = product.Stock;
-                    Database.ActiveCampaignCache.Add(campaign.ProductCode, campaign);                
-                    res = campaign.CampaignToString("create");
+                    // aynı isimde başka bir kampanya var mı(aktif ya da pasif)                        
+                    if( allCampaignsOfProduct.ContainsKey(campaign.Name))
+                    {
+                        res = "There is already another campaign with same name for this product " + campaign.ProductCode;                            
+                    }
+                    else
+                    {
+                        res = AddAnActiveCampaignForProduct(campaign, allCampaignsOfProduct);                  
+                    }
                 }
                 else
                 {
-                    res = "There is no such product: " + campaign.ProductCode;
-                }                
+                    // bu product kayıtlı kampnya yoksa sıfırdan yarat
+                    res = CreateAnActiveCampaignForProduct(campaign);
+                }             
             }
 
             return res;
         }
 
-        public Campaign GetCampaign(string productCode)
+        private string CreateAnActiveCampaignForProduct(Campaign campaign)
+        {
+            string res;
+            Product product = GetProduct(campaign.ProductCode);
+            if(product == null)
+            {
+                res = "There is no such product: " + campaign.ProductCode;
+            }
+            else
+            {
+                campaign.OriginalPrice = product.Price;
+                campaign.OriginalStock = product.Stock;
+
+                campaign.IsActive = true;
+                Dictionary<string, Campaign> campaignDict = new Dictionary<string, Campaign>();
+                campaignDict.Add(campaign.Name, campaign);
+                Database.CampaignCache.Add(product.ProductCode, campaignDict);     
+                res = campaign.CampaignToString("create");     
+            }     
+
+            return res;
+        }
+
+        private string AddAnActiveCampaignForProduct(Campaign campaign, Dictionary<string, Campaign> allCampaignsOfProduct)
+        {
+            string res;
+            var activeCampaign = allCampaignsOfProduct.Values.SingleOrDefault(x => x.IsActive);
+
+            if(activeCampaign != null)
+            {
+                res = "There is already an active campaign";
+            }
+            else
+            {
+                Product product = GetProduct(campaign.ProductCode);
+
+                if(product == null)
+                {
+                    res = "There is no such product: " + campaign.ProductCode;
+                }
+                else
+                {
+                    campaign.OriginalPrice = product.Price;
+                    campaign.OriginalStock = product.Stock;
+                    campaign.IsActive = true;
+
+                    allCampaignsOfProduct.Add(campaign.Name, campaign); 
+                    Database.CampaignCache[product.ProductCode] = allCampaignsOfProduct;
+                    res = campaign.CampaignToString("create");                    
+                }    
+            }     
+
+            return res;    
+        }
+
+        private Campaign GetActiveCampaignOfProduct(string productCode)
         {
             Campaign campaign = null;
-            if(Database.ActiveCampaignCache.ContainsKey(productCode))
+            Dictionary<string, Campaign> allCampaignsOfProduct;
+            if(Database.CampaignCache.TryGetValue(productCode, out allCampaignsOfProduct))
             {
-                campaign = Database.ActiveCampaignCache[productCode];
+                campaign = allCampaignsOfProduct.Values.SingleOrDefault(x => x.IsActive);    
             }
 
             return campaign;
@@ -137,26 +212,29 @@ namespace SimpleCampaignModule.Business
 
         public Campaign GetCampaignByName(string campaignName)
         {
-            Campaign campaign;
-            try
-            {
-                campaign = Database.ActiveCampaignCache.Values.Single(x => x.Name == campaignName);
-            }
-            catch(Exception ex) when (ex != null)
-            {
-                campaign = null;
-            }
+            Campaign campaign = null;
+            List<Dictionary<string, Campaign>> allCampaignsOfAllProducts = Database.CampaignCache.Values.ToList();
 
+            var allCampaignsOfProduct = allCampaignsOfAllProducts.SingleOrDefault(x => x.ContainsKey(campaignName));
+
+            if(allCampaignsOfProduct != null)
+            {
+                allCampaignsOfProduct.TryGetValue(campaignName, out campaign);
+            }
+            
             return campaign;
             
         }
-        public string UpdateCampaign(Campaign campaign)
+        private string UpdateCampaign(Campaign campaign)
         {
             string result = "error";
-            if(Database.ActiveCampaignCache.ContainsKey(campaign.ProductCode))
+            if(Database.CampaignCache.ContainsKey(campaign.ProductCode))
             {
-                Database.ActiveCampaignCache[campaign.ProductCode] = campaign;
-                result = null;
+                if(Database.CampaignCache[campaign.ProductCode].ContainsKey(campaign.Name))
+                {
+                    Database.CampaignCache[campaign.ProductCode][campaign.Name] = campaign;    
+                    result = null;
+                }                
             }
             return result;
 
@@ -190,12 +268,17 @@ namespace SimpleCampaignModule.Business
             return product;
         }
 
-        public string UpdateProduct(string productCode, decimal price, int stock)
+        private string UpdateProduct(string productCode, decimal price, decimal previousPrice, int stock)
         {
             string result = "error";
             if(Database.ProductCache.ContainsKey(productCode))
             {
-                Database.ProductCache[productCode] = new Product(productCode, price, stock);
+                Product product = new Product();
+                product.ProductCode = productCode;
+                product.Price = price;
+                product.PreviousPrice = previousPrice;
+                product.Stock = stock;
+                Database.ProductCache[productCode] = product;
                 result = null;
             }
             return result;
@@ -220,21 +303,28 @@ namespace SimpleCampaignModule.Business
 
         private void IncreaseLocalTimeOfCampaigns(int hour)
         {
-            foreach (var key in Database.ActiveCampaignCache.Keys.ToList())
+            foreach (var product in Database.CampaignCache.Keys.ToList())
             {
-                int duration = Database.ActiveCampaignCache[key].Duration;
-                int campaignLocalHour = Database.ActiveCampaignCache[key].CurrentLocalHour;
-                
-                if(campaignLocalHour > duration)
+                foreach(var campaignName in Database.CampaignCache[product].Keys.ToList())
                 {
-                    Database.ActiveCampaignCache.Remove(key);
-                }
-                else
-                {
-                    Database.ActiveCampaignCache[key].CurrentLocalHour = campaignLocalHour;
-                }
+                    Campaign campaign = Database.CampaignCache[product][campaignName];
+                    if(campaign.IsActive)
+                    {
+                        int duration = campaign.Duration;
+                        int campaignLocalHour = campaign.CurrentLocalHour;
 
-                campaignLocalHour += hour;                
+                        campaignLocalHour += hour;
+                        
+                        if(campaignLocalHour > duration)
+                        {
+                            campaign.IsActive = false;
+                        }
+                        else
+                        {
+                            campaign.CurrentLocalHour = campaignLocalHour;
+                        }                        
+                    }
+                }                                
             }
         }
     }

@@ -15,6 +15,8 @@ namespace SimpleCampaignModule.Domain.Campaign
         public int CurrentSales{get; set;}
         public decimal CurrentAverageItemPrice{get; set;}
 
+        public bool IsActive {get; set;}
+
         public int CurrentLocalHour{get; set;}
 
         public string CampaignToString(string action)
@@ -27,7 +29,7 @@ namespace SimpleCampaignModule.Domain.Campaign
             }
             else
             {
-                res = "Campaign " + Name + " info; Status Active, Target Sales: " + TargetSalesCount.ToString() 
+                res = "Campaign " + Name + " info; Status " + (IsActive ? "Active":"Pasive") + ", Target Sales: " + TargetSalesCount.ToString() 
                 +", Total Sales: " + CurrentSales.ToString() + " Turnover: " + CurrentTurnOver.ToString("0.00") 
                 + " Average Item Price: " + CurrentAverageItemPrice.ToString("0.00");   
             }

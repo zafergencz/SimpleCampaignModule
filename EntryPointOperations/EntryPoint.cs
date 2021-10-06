@@ -1,21 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using SimpleCampaignModule.Domain.Product;
 using SimpleCampaignModule.Domain.Order;
 using SimpleCampaignModule.Domain.Campaign;
+using SimpleCampaignModule.Common;
+using Microsoft.Extensions.DependencyInjection;
 using SimpleCampaignModule.Controller;
 
 namespace SimpleCampaignModule.EntryPointOperations
 {
     public class EntryPoint
     {
-        Controllers controller;
+        IControllers controller;
+        private const string wrongNumberOfParameters = "Wrong number of parameters";
 
         public EntryPoint()
         {
-            controller = new Controllers();
+            controller = Services.serviceProvider.GetService<IControllers>();
         }
 
         public List<string> ExecuteCommands(string[] lines)
@@ -28,7 +30,7 @@ namespace SimpleCampaignModule.EntryPointOperations
 
                 if(commandAndInputs != null && commandAndInputs.Any())
                 {
-                    string res = "";
+                    string res;
                     
                     switch(commandAndInputs[0])
                     {
@@ -67,7 +69,7 @@ namespace SimpleCampaignModule.EntryPointOperations
 
         public string  CreateProduct(string[] inputs)
         {
-            string res = "";
+            string res;
             if(inputs.Length == 4)
             {
                 Product product = new Product();
@@ -80,9 +82,15 @@ namespace SimpleCampaignModule.EntryPointOperations
                 product.Price = price;            
                 
                 Int32.TryParse(inputs[3], out stock);
-                product.Stock = stock;               
+                product.Stock = stock;         
+
+                product.PreviousPrice = product.Price;      
 
                 res = controller.CreateProduct(product);
+            }
+            else
+            {
+                res = wrongNumberOfParameters;
             }
 
             return res;
@@ -90,10 +98,14 @@ namespace SimpleCampaignModule.EntryPointOperations
 
         public string GetProductInfo(string[] inputs)
         {
-            string res = "";
+            string res;
             if(inputs.Length == 2)
             {
                 res = controller.GetProductInfo(inputs[1]);
+            }
+            else
+            {
+                res = wrongNumberOfParameters;
             }
 
             return res;
@@ -101,7 +113,7 @@ namespace SimpleCampaignModule.EntryPointOperations
 
         public string CreateOrder(string[] inputs)
         {
-            string res = "";
+            string res;
 
             if(inputs.Length == 3)
             {
@@ -114,13 +126,17 @@ namespace SimpleCampaignModule.EntryPointOperations
 
                 res = controller.CreateOrder(order);
             }
+            else
+            {
+                res = wrongNumberOfParameters;
+            }
 
             return res;
         }
 
         public string CreateCampaign(string[] inputs)
         {
-            string res = "";
+            string res;
             if(inputs.Length == 6)
             {
                 Campaign campaign = new Campaign();
@@ -141,16 +157,24 @@ namespace SimpleCampaignModule.EntryPointOperations
 
                 res = controller.CreateCampaign(campaign);
             }
+            else
+            {
+                res = wrongNumberOfParameters;
+            }
 
             return res;
         }
 
         public string GetCampaignInfo(string[] inputs)
         {
-            string res = "";
+            string res;
             if(inputs.Length == 2)
             {
                 res = controller.GetCampaignInfo(inputs[1]);
+            }
+            else
+            {
+                res = wrongNumberOfParameters;
             }
 
             return res;
@@ -167,6 +191,10 @@ namespace SimpleCampaignModule.EntryPointOperations
                 {
                     res = controller.IncreaseTime(hour);
                 }
+            }
+            else
+            {
+                res = wrongNumberOfParameters;
             }
 
             return res;

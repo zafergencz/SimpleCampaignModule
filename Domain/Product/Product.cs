@@ -6,19 +6,9 @@ namespace SimpleCampaignModule.Domain.Product
     {
         public string ProductCode {get; set;}
         public decimal Price{get; set;}
+        public decimal PreviousPrice{get; set;}
         public int Stock{get; set;}
 
-        public Product(){
-            
-        }
-        
-        public Product(string productCode, decimal price, int stock)
-        {
-            ProductCode = productCode;
-            Price = price;
-            Stock = stock;
-        }
-        
         public string ProductToString(string action)
         {
             string res;
@@ -28,7 +18,7 @@ namespace SimpleCampaignModule.Domain.Product
             }
             else
             {
-                res = "Product " + ProductCode + " info: price: " + Price.ToString("0.00") + " stock: " + Stock.ToString();   
+                res = "Product " + ProductCode + " info: new price: " + Price.ToString("0.00") + " previous price: " + PreviousPrice.ToString("0.00") + " stock: " + Stock.ToString();   
             }
             return res;
         }
