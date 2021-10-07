@@ -1,6 +1,6 @@
 using System;
 
-namespace SimpleCampaignModule.Domain.Product
+namespace SimpleCampaignModule.CampaignModuleStarter.Domain.Product
 {
     public class Product
     {

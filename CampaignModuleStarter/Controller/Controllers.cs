@@ -1,11 +1,11 @@
-using SimpleCampaignModule.Domain.Product;
-using SimpleCampaignModule.Domain.Order;
-using SimpleCampaignModule.Domain.Campaign;
+using SimpleCampaignModule.CampaignModuleStarter.Domain.Product;
+using SimpleCampaignModule.CampaignModuleStarter.Domain.Order;
+using SimpleCampaignModule.CampaignModuleStarter.Domain.Campaign;
 using Microsoft.Extensions.DependencyInjection;
-using SimpleCampaignModule.Business;
-using SimpleCampaignModule.Common;
+using SimpleCampaignModule.CampaignModuleStarter.Business;
+using SimpleCampaignModule.CampaignModuleStarter.Common;
 
-namespace SimpleCampaignModule.Controller
+namespace SimpleCampaignModule.CampaignModuleStarter.Controller
 {
     public class Controllers: IControllers
     {

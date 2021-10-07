@@ -1,8 +1,8 @@
-using SimpleCampaignModule.Domain.Campaign;
-using SimpleCampaignModule.Domain.Order;
-using SimpleCampaignModule.Domain.Product;
+using SimpleCampaignModule.CampaignModuleStarter.Domain.Campaign;
+using SimpleCampaignModule.CampaignModuleStarter.Domain.Order;
+using SimpleCampaignModule.CampaignModuleStarter.Domain.Product;
 
-namespace SimpleCampaignModule.Business
+namespace SimpleCampaignModule.CampaignModuleStarter.Business
 {
     public interface IBusinessActions
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace SimpleCampaignModule.Domain.Order
+namespace SimpleCampaignModule.CampaignModuleStarter.Domain.Order
 {
     public class Order
     {

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SimpleCampaignModule.Common
+namespace SimpleCampaignModule.CampaignModuleStarter.Common
 {
     public static class Services
     {

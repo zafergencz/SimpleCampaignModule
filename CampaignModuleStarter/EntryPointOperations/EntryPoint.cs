@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SimpleCampaignModule.Domain.Product;
-using SimpleCampaignModule.Domain.Order;
-using SimpleCampaignModule.Domain.Campaign;
-using SimpleCampaignModule.Common;
+using SimpleCampaignModule.CampaignModuleStarter.Domain.Product;
+using SimpleCampaignModule.CampaignModuleStarter.Domain.Order;
+using SimpleCampaignModule.CampaignModuleStarter.Domain.Campaign;
+using SimpleCampaignModule.CampaignModuleStarter.Common;
 using Microsoft.Extensions.DependencyInjection;
-using SimpleCampaignModule.Controller;
+using SimpleCampaignModule.CampaignModuleStarter.Controller;
 
-namespace SimpleCampaignModule.EntryPointOperations
+namespace SimpleCampaignModule.CampaignModuleStarter.EntryPointOperations
 {
     public class EntryPoint
     {

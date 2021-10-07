@@ -1,6 +1,6 @@
 using System;
 
-namespace SimpleCampaignModule.Domain.Campaign
+namespace SimpleCampaignModule.CampaignModuleStarter.Domain.Campaign
 {
     public class Campaign
     {

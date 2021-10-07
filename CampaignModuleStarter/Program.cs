@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using SimpleCampaignModule.Business;
-using SimpleCampaignModule.Controller;
-using SimpleCampaignModule.EntryPointOperations;
-using SimpleCampaignModule.Common;
+using SimpleCampaignModule.CampaignModuleStarter.Business;
+using SimpleCampaignModule.CampaignModuleStarter.Controller;
+using SimpleCampaignModule.CampaignModuleStarter.EntryPointOperations;
+using SimpleCampaignModule.CampaignModuleStarter.Common;
+using SimpleCampaignModule.CampaignModuleStarter.Persistence;
 
 namespace SimpleCampaignModule
 {
@@ -30,6 +31,7 @@ namespace SimpleCampaignModule
             Services.serviceProvider = new ServiceCollection()
             .AddSingleton<IBusinessActions, BusinessActions>()
             .AddSingleton<IControllers, Controllers>()
+            .AddSingleton<IDatabase, Database>()
             .BuildServiceProvider();            
         }
 
