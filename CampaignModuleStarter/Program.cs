@@ -44,7 +44,7 @@ namespace SimpleCampaignModule
                     string[] lines = System.IO.File.ReadAllLines(@filepath);
 
                     EntryPoint entryPoint = new EntryPoint();
-                    List<string> outputs = entryPoint.ExecuteCommands(lines);
+                    List<string> outputs = entryPoint.ExecuteAllCommands(lines);
 
                     foreach (string output in outputs)
                     {

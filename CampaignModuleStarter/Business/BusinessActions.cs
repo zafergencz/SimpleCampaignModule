@@ -85,7 +85,7 @@ namespace SimpleCampaignModule.CampaignModuleStarter.Business
             return res;
         }
 
-        private bool ProductHasActiveCampaign(string productCode)
+        public bool ProductHasActiveCampaign(string productCode)
         {
             bool res = false;
             Dictionary<string, Campaign> productCampaigns;
@@ -102,7 +102,7 @@ namespace SimpleCampaignModule.CampaignModuleStarter.Business
             return res;
         }
 
-        private string SaveOrder(Order order)
+        public string SaveOrder(Order order)
         {
             if(database.OrderCache.ContainsKey(order.ProductCode))
             {
@@ -175,7 +175,7 @@ namespace SimpleCampaignModule.CampaignModuleStarter.Business
             return res;
         }
 
-        private string AddAnActiveCampaignForProduct(Campaign campaign, Dictionary<string, Campaign> allCampaignsOfProduct)
+        public string AddAnActiveCampaignForProduct(Campaign campaign, Dictionary<string, Campaign> allCampaignsOfProduct)
         {
             string res;
             var activeCampaign = allCampaignsOfProduct.Values.SingleOrDefault(x => x.IsActive);
@@ -207,7 +207,7 @@ namespace SimpleCampaignModule.CampaignModuleStarter.Business
             return res;    
         }
 
-        private Campaign GetActiveCampaignOfProduct(string productCode)
+        public Campaign GetActiveCampaignOfProduct(string productCode)
         {
             Campaign campaign = null;
             Dictionary<string, Campaign> allCampaignsOfProduct;
@@ -234,7 +234,7 @@ namespace SimpleCampaignModule.CampaignModuleStarter.Business
             return campaign;
             
         }
-        private string UpdateCampaign(Campaign campaign)
+        public string UpdateCampaign(Campaign campaign)
         {
             string result = "error";
             if(database.CampaignCache.ContainsKey(campaign.ProductCode))
@@ -310,7 +310,7 @@ namespace SimpleCampaignModule.CampaignModuleStarter.Business
             return "Time is " + (res.Length == 2 ? res : "0" + res ) + ":00";
         }
 
-        private void IncreaseLocalTimeOfCampaigns(int hour)
+        public void IncreaseLocalTimeOfCampaigns(int hour)
         {
             foreach (var product in database.CampaignCache.Keys.ToList())
             {

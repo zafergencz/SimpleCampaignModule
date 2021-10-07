@@ -20,51 +20,60 @@ namespace SimpleCampaignModule.CampaignModuleStarter.EntryPointOperations
             controller = Services.serviceProvider.GetService<IControllers>();
         }
 
-        public List<string> ExecuteCommands(string[] lines)
+        public List<string> ExecuteAllCommands(string[] lines)
         {
-            List<string> outputs = new List<string>();            
+            List<string> outputs = new List<string>();  
 
-            foreach(string str in lines)
+            if(lines != null)
             {
-                string[] commandAndInputs = str.Split(' ');                
-
-                if(commandAndInputs != null && commandAndInputs.Any())
+                foreach(string str in lines)
                 {
-                    string res;
-                    
-                    switch(commandAndInputs[0])
-                    {
-                        case "create_product":
-                            res = CreateProduct(commandAndInputs);
-                            break;
-                        case "get_product_info":
-                            res = GetProductInfo(commandAndInputs);
-                            break;
-                        case "create_order":
-                            res = CreateOrder(commandAndInputs);
-                            break;
-                        case "create_campaign":
-                            res = CreateCampaign(commandAndInputs);
-                            break;
-                        case "get_campaign_info":
-                            res = GetCampaignInfo(commandAndInputs);
-                            break;
-                        case "increase_time":
-                            res = IncreaseTime(commandAndInputs);
-                            break;
-                        default:
-                            res = null;
-                            break;
-                    }
+                    string[] commandAndInputs = str.Split(' ');                
 
-                    if(!String.IsNullOrEmpty(res))
+                    if(commandAndInputs != null && commandAndInputs.Any())
                     {
-                        outputs.Add(res);
+                        string res = ExecuteCommand(commandAndInputs);
+
+                        if(!String.IsNullOrEmpty(res))
+                        {
+                            outputs.Add(res);
+                        }
                     }
                 }
-            }
+            }           
 
             return outputs;
+        }
+
+        public string ExecuteCommand(string[] commandAndInputs)
+        {
+            string res;
+
+            switch(commandAndInputs[0])
+            {
+                case "create_product":
+                    res = CreateProduct(commandAndInputs);
+                    break;
+                case "get_product_info":
+                    res = GetProductInfo(commandAndInputs);
+                    break;
+                case "create_order":
+                    res = CreateOrder(commandAndInputs);
+                    break;
+                case "create_campaign":
+                    res = CreateCampaign(commandAndInputs);
+                    break;
+                case "get_campaign_info":
+                    res = GetCampaignInfo(commandAndInputs);
+                    break;
+                case "increase_time":
+                    res = IncreaseTime(commandAndInputs);
+                    break;
+                default:
+                    res = null;
+                    break;
+            }
+            return res;
         }
 
         public string  CreateProduct(string[] inputs)

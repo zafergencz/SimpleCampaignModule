@@ -9,6 +9,6 @@ namespace SimpleCampaignModule.CampaignModuleStarter.Persistence
     {
         public Dictionary<string, Product> ProductCache;
         public Dictionary<string, List<Order>> OrderCache;
-        public Dictionary<string, Dictionary<string, Campaign>> CampaignCache;        
+        public Dictionary<string, Dictionary<string, Campaign>> CampaignCache;      
     }
 }
